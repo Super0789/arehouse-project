@@ -86,9 +86,10 @@ begin
     select * from jsonb_to_recordset(v_needed) as x(item_id uuid, total_needed int)
   loop
     select coalesce(quantity_on_hand, 0) into v_stock
-      from supervisor_stock
-     where supervisor_id = v_session.supervisor_id
-       and item_id = v_need_rec.item_id;
+    from supervisor_stock
+    where supervisor_id = v_session.supervisor_id
+      and item_id = v_need_rec.item_id
+    for update;
     v_stock := coalesce(v_stock, 0);
 
     if v_need_rec.total_needed > v_stock then

@@ -66,7 +66,9 @@
   }
   body {
     @apply bg-background text-foreground;
+    min-height: 100dvh;
     font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* Arabic numerals should follow the locale; tabular for alignment in tables. */
