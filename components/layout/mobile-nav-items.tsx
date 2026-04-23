@@ -25,64 +25,68 @@ type NavItem = {
   roles: UserRole[];
 };
 
+const APP_LABEL = "\u0646\u0638\u0627\u0645 \u0627\u0644\u0645\u062e\u0632\u0648\u0646";
+const APP_STAGE_LABEL =
+  "\u0627\u0644\u0645\u0631\u062d\u0644\u0629 \u0627\u0644\u0623\u0648\u0644\u0649 \u2014 \u0627\u0644\u0625\u0635\u062f\u0627\u0631 \u0627\u0644\u062a\u062c\u0631\u064a\u0628\u064a";
+
 const NAV: NavItem[] = [
   {
     href: "/dashboard",
-    label: "Ù„ÙˆØ­Ø© Ø§Ù„ØªØ­ÙƒÙ…",
+    label: "\u0644\u0648\u062d\u0629 \u0627\u0644\u062a\u062d\u0643\u0645",
     icon: LayoutDashboard,
     roles: ["admin", "supervisor", "viewer"],
   },
   {
     href: "/sessions/today",
-    label: "Ø¬Ù„Ø³Ø© Ø§Ù„ÙŠÙˆÙ…",
+    label: "\u062c\u0644\u0633\u0629 \u0627\u0644\u064a\u0648\u0645",
     icon: SunMedium,
     roles: ["admin", "supervisor"],
   },
   {
     href: "/sessions",
-    label: "Ø³Ø¬Ù„ Ø§Ù„Ø¬Ù„Ø³Ø§Øª",
+    label: "\u0633\u062c\u0644 \u0627\u0644\u062c\u0644\u0633\u0627\u062a",
     icon: ClipboardList,
     roles: ["admin", "supervisor", "viewer"],
   },
   {
     href: "/stock/transfers",
-    label: "ØªØ­ÙˆÙŠÙ„Ø§Øª Ø§Ù„Ù…Ø®Ø²ÙˆÙ†",
+    label: "\u062a\u062d\u0648\u064a\u0644\u0627\u062a \u0627\u0644\u0645\u062e\u0632\u0648\u0646",
     icon: ArrowRightLeft,
     roles: ["admin"],
   },
   {
     href: "/stock/supervisors",
-    label: "Ù…Ø®Ø²ÙˆÙ† Ø§Ù„Ù…Ø´Ø±ÙÙŠÙ†",
+    label: "\u0645\u062e\u0632\u0648\u0646 \u0627\u0644\u0645\u0634\u0631\u0641\u064a\u0646",
     icon: Warehouse,
     roles: ["admin", "supervisor", "viewer"],
   },
   {
     href: "/items",
-    label: "Ø§Ù„Ø£ØµÙ†Ø§Ù",
+    label: "\u0627\u0644\u0623\u0635\u0646\u0627\u0641",
     icon: Package,
     roles: ["admin", "viewer"],
   },
   {
     href: "/teams",
-    label: "Ø§Ù„ÙØ±Ù‚",
+    label: "\u0627\u0644\u0641\u0631\u0642",
     icon: UsersRound,
     roles: ["admin", "viewer"],
   },
   {
     href: "/promoters",
-    label: "Ø§Ù„Ù…Ø±ÙˆÙ‘Ø¬ÙˆÙ†",
+    label: "\u0627\u0644\u0645\u0631\u0648\u0651\u062c\u0648\u0646",
     icon: Users,
     roles: ["admin", "viewer"],
   },
   {
     href: "/reports",
-    label: "Ø§Ù„ØªÙ‚Ø§Ø±ÙŠØ±",
+    label: "\u0627\u0644\u062a\u0642\u0627\u0631\u064a\u0631",
     icon: BarChart3,
     roles: ["admin", "supervisor", "viewer"],
   },
   {
     href: "/admin/users",
-    label: "Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…ÙŠÙ†",
+    label: "\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646",
     icon: Settings,
     roles: ["admin"],
   },
@@ -127,9 +131,9 @@ export function SidebarNav({
       <div className="mt-auto rounded-md bg-muted/50 p-3 text-xs text-muted-foreground">
         <div className="mb-1 flex items-center gap-2 font-semibold text-foreground">
           <Boxes className="h-3.5 w-3.5" />
-          Ù†Ø¸Ø§Ù… Ø§Ù„Ù…Ø®Ø²ÙˆÙ†
+          {APP_LABEL}
         </div>
-        <p>Ø§Ù„Ù…Ø±Ø­Ù„Ø© Ø§Ù„Ø£ÙˆÙ„Ù‰ â€” Ø§Ù„Ø¥ØµØ¯Ø§Ø± Ø§Ù„ØªØ¬Ø±ÙŠØ¨ÙŠ</p>
+        <p>{APP_STAGE_LABEL}</p>
       </div>
     </nav>
   );

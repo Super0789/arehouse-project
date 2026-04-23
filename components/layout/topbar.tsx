@@ -4,6 +4,10 @@ import type { UserProfile } from "@/lib/types/database";
 import { UserMenu } from "./user-menu";
 import { formatDateArabic } from "@/lib/utils";
 
+const APP_NAME =
+  "\u0646\u0638\u0627\u0645 \u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0645\u062e\u0632\u0648\u0646 \u0627\u0644\u062a\u0631\u0648\u064a\u062c\u064a";
+const MENU_LABEL = "\u0627\u0644\u0642\u0627\u0626\u0645\u0629";
+
 export function Topbar({
   profile,
   email,
@@ -22,7 +26,7 @@ export function Topbar({
           <button
             type="button"
             className="inline-flex h-11 w-11 items-center justify-center rounded-md hover:bg-accent active:scale-[0.98] md:hidden"
-            aria-label="Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©"
+            aria-label={MENU_LABEL}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation"
             onClick={onMenuToggle}
@@ -34,7 +38,7 @@ export function Topbar({
               <span className="text-sm font-bold">PI</span>
             </div>
             <span className="hidden truncate text-sm font-semibold min-[381px]:inline">
-              Ù†Ø¸Ø§Ù… Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù…Ø®Ø²ÙˆÙ† Ø§Ù„ØªØ±ÙˆÙŠØ¬ÙŠ
+              {APP_NAME}
             </span>
           </Link>
         </div>
