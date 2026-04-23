@@ -18,28 +18,11 @@ export default async function ProtectedLayout({
 
   if (!user) redirect("/login");
 
-  const profileQuery = await supabase
+  const { data: profile } = await supabase
     .from("user_profiles")
     .select("*")
     .eq("id", user.id)
     .maybeSingle<UserProfile>();
-
-  const visibleRowsQuery = await supabase
-    .from("user_profiles")
-    .select("id, role", { count: "exact" });
-
-  // eslint-disable-next-line no-console
-  console.log("[PROTECTED_LAYOUT_DEBUG]", {
-    auth_user_id: user.id,
-    auth_user_email: user.email,
-    profile_query_data: profileQuery.data,
-    profile_query_error: profileQuery.error,
-    visible_rows_count: visibleRowsQuery.count,
-    visible_rows_error: visibleRowsQuery.error,
-    visible_row_ids: visibleRowsQuery.data?.map((r) => r.id),
-  });
-
-  const profile = profileQuery.data;
 
   if (!profile) {
     return (
