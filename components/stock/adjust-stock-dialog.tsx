@@ -21,18 +21,31 @@ export function AdjustStockButton(props: Props) {
   const router = useRouter();
   const { toast } = useToast();
   const [open, setOpen] = React.useState(false);
-  const [qty, setQty] = React.useState("");
+  const [target, setTarget] = React.useState("");
   const [reason, setReason] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
 
+  const trimmed = target.trim();
+  const parsedTarget = trimmed === "" ? NaN : Number(trimmed);
+  const isValidTarget =
+    Number.isInteger(parsedTarget) && parsedTarget >= 0;
+  const delta = isValidTarget ? parsedTarget - props.currentQty : 0;
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const n = Number(qty);
-    if (!Number.isFinite(n) || !Number.isInteger(n) || n === 0) {
+    if (!isValidTarget) {
       toast({
         variant: "destructive",
         title: "كمية غير صالحة",
-        description: "أدخل عدداً صحيحاً موجباً أو سالباً.",
+        description: "أدخل عدداً صحيحاً (0 أو أكبر).",
+      });
+      return;
+    }
+    if (delta === 0) {
+      toast({
+        variant: "destructive",
+        title: "لا يوجد تغيير",
+        description: "الكمية المُدخلة مطابقة للرصيد الحالي.",
       });
       return;
     }
@@ -40,14 +53,14 @@ export function AdjustStockButton(props: Props) {
     const res = await adjustStock({
       supervisor_id: props.supervisorId,
       item_id: props.itemId,
-      qty: n,
+      qty: delta,
       reason,
     });
     setSubmitting(false);
     if (res.ok) {
       toast({ variant: "success", title: res.message ?? "تم" });
       setOpen(false);
-      setQty("");
+      setTarget("");
       setReason("");
       router.refresh();
     } else {
@@ -75,18 +88,29 @@ export function AdjustStockButton(props: Props) {
       </div>
       <div className="flex flex-wrap items-end gap-2">
         <div className="space-y-1">
-          <Label htmlFor={`qty-${props.itemId}`}>الكمية (± عدد)</Label>
+          <Label htmlFor={`qty-${props.itemId}`}>الكمية الجديدة</Label>
           <Input
             id={`qty-${props.itemId}`}
             dir="ltr"
-            type="text"
+            type="number"
             inputMode="numeric"
-            placeholder="مثلاً: -5 أو 10"
-            value={qty}
-            onChange={(e) => setQty(e.target.value)}
+            min={0}
+            step={1}
+            placeholder="مثلاً: 0 أو 25"
+            value={target}
+            onChange={(e) => setTarget(e.target.value)}
             className="w-32"
             required
           />
+          {isValidTarget && delta !== 0 && (
+            <p
+              className={`text-xs ${
+                delta > 0 ? "text-emerald-600" : "text-amber-600"
+              }`}
+            >
+              {delta > 0 ? `+${delta}` : delta} عن الرصيد الحالي
+            </p>
+          )}
         </div>
         <div className="space-y-1 flex-1 min-w-[180px]">
           <Label htmlFor={`reason-${props.itemId}`}>السبب</Label>
@@ -98,7 +122,11 @@ export function AdjustStockButton(props: Props) {
           />
         </div>
         <div className="flex gap-2">
-          <Button type="submit" size="sm" disabled={submitting}>
+          <Button
+            type="submit"
+            size="sm"
+            disabled={submitting || !isValidTarget || delta === 0}
+          >
             {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
             حفظ
           </Button>
@@ -106,7 +134,11 @@ export function AdjustStockButton(props: Props) {
             type="button"
             size="sm"
             variant="outline"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              setOpen(false);
+              setTarget("");
+              setReason("");
+            }}
           >
             <X className="h-4 w-4" />
           </Button>
