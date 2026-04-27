@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(grep -n \"title=\\\\\"\\\\\\\\\\\\\\\\u\" d:/Bots/warhouse/my-project/app/\\\\\\(protected\\\\\\)/sessions/page.tsx)",
+      "Bash(awk 'NR>=130 && NR<=135 {print NR\": \"$0}' d:/Bots/warhouse/my-project/app/\\\\\\(protected\\\\\\)/sessions/page.tsx)",
+      "Bash(xxd)"
     ]
   }
 }

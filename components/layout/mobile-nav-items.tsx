@@ -25,74 +25,74 @@ type NavItem = {
   roles: UserRole[];
 };
 
-const APP_LABEL = "\u0646\u0638\u0627\u0645 \u0627\u0644\u0645\u062e\u0632\u0648\u0646";
+const APP_LABEL = "نظام المخزون";
 const APP_STAGE_LABEL =
-  "\u0627\u0644\u0645\u0631\u062d\u0644\u0629 \u0627\u0644\u0623\u0648\u0644\u0649 \u2014 \u0627\u0644\u0625\u0635\u062f\u0627\u0631 \u0627\u0644\u062a\u062c\u0631\u064a\u0628\u064a";
+  "المرحلة الأولى — الإصدار التجريبي";
 
 const NAV: NavItem[] = [
   {
     href: "/dashboard",
-    label: "\u0644\u0648\u062d\u0629 \u0627\u0644\u062a\u062d\u0643\u0645",
+    label: "لوحة التحكم",
     icon: LayoutDashboard,
     roles: ["admin", "supervisor", "viewer"],
   },
   {
     href: "/sessions/today",
-    label: "\u062c\u0644\u0633\u0629 \u0627\u0644\u064a\u0648\u0645",
+    label: "جلسة اليوم",
     icon: SunMedium,
     roles: ["admin", "supervisor"],
   },
   {
     href: "/sessions",
-    label: "\u0633\u062c\u0644 \u0627\u0644\u062c\u0644\u0633\u0627\u062a",
+    label: "سجل الجلسات",
     icon: ClipboardList,
     roles: ["admin", "supervisor", "viewer"],
   },
   {
     href: "/stock/warehouse",
-    label: "\u0627\u0644\u0645\u062e\u0632\u0646 \u0627\u0644\u0631\u0626\u064a\u0633\u064a",
+    label: "المخزن الرئيسي",
     icon: Warehouse,
     roles: ["admin", "viewer"],
   },
   {
     href: "/stock/transfers",
-    label: "\u062a\u062d\u0648\u064a\u0644\u0627\u062a \u0627\u0644\u0645\u062e\u0632\u0648\u0646",
+    label: "تحويلات المخزون",
     icon: ArrowRightLeft,
     roles: ["admin"],
   },
   {
     href: "/stock/supervisors",
-    label: "\u0645\u062e\u0632\u0648\u0646 \u0627\u0644\u0645\u0634\u0631\u0641\u064a\u0646",
+    label: "مخزون المشرفين",
     icon: Warehouse,
     roles: ["admin", "supervisor", "viewer"],
   },
   {
     href: "/items",
-    label: "\u0627\u0644\u0623\u0635\u0646\u0627\u0641",
+    label: "الأصناف",
     icon: Package,
     roles: ["admin", "viewer"],
   },
   {
     href: "/teams",
-    label: "\u0627\u0644\u0641\u0631\u0642",
+    label: "الفرق",
     icon: UsersRound,
     roles: ["admin", "viewer"],
   },
   {
     href: "/promoters",
-    label: "\u0627\u0644\u0645\u0631\u0648\u0651\u062c\u0648\u0646",
+    label: "المروّجون",
     icon: Users,
     roles: ["admin", "viewer"],
   },
   {
     href: "/reports",
-    label: "\u0627\u0644\u062a\u0642\u0627\u0631\u064a\u0631",
+    label: "التقارير",
     icon: BarChart3,
     roles: ["admin", "supervisor", "viewer"],
   },
   {
     href: "/admin/users",
-    label: "\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646",
+    label: "إدارة المستخدمين",
     icon: Settings,
     roles: ["admin"],
   },

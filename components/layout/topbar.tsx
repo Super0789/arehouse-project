@@ -5,8 +5,8 @@ import { UserMenu } from "./user-menu";
 import { formatDateArabic } from "@/lib/utils";
 
 const APP_NAME =
-  "\u0646\u0638\u0627\u0645 \u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0645\u062e\u0632\u0648\u0646 \u0627\u0644\u062a\u0631\u0648\u064a\u062c\u064a";
-const MENU_LABEL = "\u0627\u0644\u0642\u0627\u0626\u0645\u0629";
+  "نظام إدارة المخزون الترويجي";
+const MENU_LABEL = "القائمة";
 
 export function Topbar({
   profile,

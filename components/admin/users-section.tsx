@@ -51,9 +51,9 @@ interface Props {
 }
 
 const ROLE_LABELS: Record<UserRole, string> = {
-  admin: "\u0645\u062f\u064a\u0631",
-  supervisor: "\u0645\u0634\u0631\u0641",
-  viewer: "\u0645\u0634\u0627\u0647\u062f",
+  admin: "مدير",
+  supervisor: "مشرف",
+  viewer: "مشاهد",
 };
 
 export function UsersSection({ users, teams, supervisors }: Props) {
@@ -140,14 +140,14 @@ export function UsersSection({ users, teams, supervisors }: Props) {
     if (result.ok) {
       toast({
         variant: "success",
-        title: "\u062a\u0645 \u062d\u0641\u0638 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+        title: "تم حفظ بيانات المستخدم",
       });
       reset();
       router.refresh();
     } else {
       toast({
         variant: "destructive",
-        title: "\u062e\u0637\u0623",
+        title: "خطأ",
         description: result.error,
       });
     }
@@ -161,14 +161,14 @@ export function UsersSection({ users, teams, supervisors }: Props) {
       toast({
         variant: "success",
         title: user.active
-          ? "\u062a\u0645 \u062a\u0639\u0637\u064a\u0644 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645"
-          : "\u062a\u0645 \u062a\u0641\u0639\u064a\u0644 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+          ? "تم تعطيل المستخدم"
+          : "تم تفعيل المستخدم",
       });
       router.refresh();
     } else {
       toast({
         variant: "destructive",
-        title: "\u062e\u0637\u0623",
+        title: "خطأ",
         description: result.error,
       });
     }
@@ -178,7 +178,7 @@ export function UsersSection({ users, teams, supervisors }: Props) {
     <Card>
       <CardHeader>
         <CardTitle>
-          {"\u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u0648\u0646"}
+          {"المستخدمون"}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -189,7 +189,7 @@ export function UsersSection({ users, teams, supervisors }: Props) {
           >
             <div className="space-y-2 lg:col-span-2">
               <Label htmlFor="full_name">
-                {"\u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0643\u0627\u0645\u0644"}
+                {"الاسم الكامل"}
               </Label>
               <Input
                 id="full_name"
@@ -206,7 +206,7 @@ export function UsersSection({ users, teams, supervisors }: Props) {
 
             <div className="space-y-2">
               <Label htmlFor="role">
-                {"\u0627\u0644\u062f\u0648\u0631"}
+                {"الدور"}
               </Label>
               <select
                 id="role"
@@ -231,7 +231,7 @@ export function UsersSection({ users, teams, supervisors }: Props) {
 
             <div className="space-y-2">
               <Label htmlFor="team">
-                {"\u0627\u0644\u0641\u0631\u064a\u0642"}
+                {"الفريق"}
               </Label>
               <select
                 id="team"
@@ -249,7 +249,7 @@ export function UsersSection({ users, teams, supervisors }: Props) {
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
               >
                 <option value="">
-                  {"\u2014 \u0628\u062f\u0648\u0646 \u0641\u0631\u064a\u0642 \u2014"}
+                  {"— بدون فريق —"}
                 </option>
                 {teams.map((team) => (
                   <option key={team.id} value={team.id}>
@@ -261,7 +261,7 @@ export function UsersSection({ users, teams, supervisors }: Props) {
 
             <div className="space-y-2 lg:col-span-2">
               <Label htmlFor="supervisor">
-                {"\u0627\u0644\u0645\u0634\u0631\u0641 \u0627\u0644\u0645\u0631\u062a\u0628\u0637"}
+                {"المشرف المرتبط"}
               </Label>
               <select
                 id="supervisor"
@@ -275,7 +275,7 @@ export function UsersSection({ users, teams, supervisors }: Props) {
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
               >
                 <option value="">
-                  {"\u2014 \u0628\u062f\u0648\u0646 \u0631\u0628\u0637 \u2014"}
+                  {"— بدون ربط —"}
                 </option>
                 {availableSupervisors.map((supervisor) => (
                   <option key={supervisor.id} value={supervisor.id}>
@@ -288,11 +288,11 @@ export function UsersSection({ users, teams, supervisors }: Props) {
             <div className="flex gap-2 sm:col-span-2 lg:col-span-4">
               <Button type="submit" disabled={submitting}>
                 {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-                {"\u062d\u0641\u0638"}
+                {"حفظ"}
               </Button>
               <Button type="button" variant="outline" onClick={reset}>
                 <X className="h-4 w-4" />
-                {"\u0625\u0644\u063a\u0627\u0621"}
+                {"إلغاء"}
               </Button>
             </div>
           </form>
@@ -302,22 +302,22 @@ export function UsersSection({ users, teams, supervisors }: Props) {
           <TableHeader>
             <TableRow>
               <TableHead>
-                {"\u0627\u0644\u0627\u0633\u0645"}
+                {"الاسم"}
               </TableHead>
               <TableHead>
-                {"\u0627\u0644\u062f\u0648\u0631"}
+                {"الدور"}
               </TableHead>
               <TableHead>
-                {"\u0627\u0644\u0641\u0631\u064a\u0642"}
+                {"الفريق"}
               </TableHead>
               <TableHead>
-                {"\u0627\u0644\u0645\u0634\u0631\u0641"}
+                {"المشرف"}
               </TableHead>
               <TableHead>
-                {"\u0627\u0644\u062d\u0627\u0644\u0629"}
+                {"الحالة"}
               </TableHead>
               <TableHead className="text-left">
-                {"\u0625\u062c\u0631\u0627\u0621\u0627\u062a"}
+                {"إجراءات"}
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -328,7 +328,7 @@ export function UsersSection({ users, teams, supervisors }: Props) {
                   colSpan={6}
                   className="py-6 text-center text-sm text-muted-foreground"
                 >
-                  {"\u0644\u0627 \u064a\u0648\u062c\u062f \u0645\u0633\u062a\u062e\u062f\u0645\u0648\u0646."}
+                  {"لا يوجد مستخدمون."}
                 </TableCell>
               </TableRow>
             )}
@@ -348,11 +348,11 @@ export function UsersSection({ users, teams, supervisors }: Props) {
                 <TableCell>
                   {user.active ? (
                     <Badge variant="success">
-                      {"\u0646\u0634\u0637"}
+                      {"نشط"}
                     </Badge>
                   ) : (
                     <Badge variant="secondary">
-                      {"\u0645\u0639\u0637\u0644"}
+                      {"معطل"}
                     </Badge>
                   )}
                 </TableCell>
@@ -377,8 +377,8 @@ export function UsersSection({ users, teams, supervisors }: Props) {
                         <Power className="h-4 w-4" />
                       )}
                       {user.active
-                        ? "\u062a\u0639\u0637\u064a\u0644"
-                        : "\u062a\u0641\u0639\u064a\u0644"}
+                        ? "تعطيل"
+                        : "تفعيل"}
                     </Button>
                   </div>
                 </TableCell>

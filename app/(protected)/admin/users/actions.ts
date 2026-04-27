@@ -17,7 +17,7 @@ async function requireAdmin(): Promise<
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { ok: false, error: "\u062c\u0644\u0633\u062a\u0643 \u0645\u0646\u062a\u0647\u064a\u0629." };
+    return { ok: false, error: "جلستك منتهية." };
   }
 
   const { data: profile } = await supabase
@@ -29,14 +29,14 @@ async function requireAdmin(): Promise<
   if (!profile) {
     return {
       ok: false,
-      error: "\u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u0634\u062e\u0635\u064a \u063a\u064a\u0631 \u0645\u0648\u062c\u0648\u062f.",
+      error: "الملف الشخصي غير موجود.",
     };
   }
 
   if (profile.role !== "admin") {
     return {
       ok: false,
-      error: "\u0635\u0644\u0627\u062d\u064a\u0627\u062a \u0627\u0644\u0645\u062f\u064a\u0631 \u0645\u0637\u0644\u0648\u0628\u0629.",
+      error: "صلاحيات المدير مطلوبة.",
     };
   }
 
@@ -58,7 +58,7 @@ export async function updateUserProfile(
   if (!input.full_name.trim()) {
     return {
       ok: false,
-      error: "\u0627\u0633\u0645 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645 \u0645\u0637\u0644\u0648\u0628.",
+      error: "اسم المستخدم مطلوب.",
     };
   }
 
@@ -67,7 +67,7 @@ export async function updateUserProfile(
       return {
         ok: false,
         error:
-          "\u064a\u062c\u0628 \u0631\u0628\u0637 \u062d\u0633\u0627\u0628 \u0627\u0644\u0645\u0634\u0631\u0641 \u0628\u0645\u0634\u0631\u0641 \u0648\u0641\u0631\u064a\u0642.",
+          "يجب ربط حساب المشرف بمشرف وفريق.",
       };
     }
   }
@@ -92,7 +92,7 @@ export async function updateUserProfile(
   revalidatePath("/admin/users");
   return {
     ok: true,
-    message: "\u062a\u0645 \u062a\u062d\u062f\u064a\u062b \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645.",
+    message: "تم تحديث المستخدم.",
   };
 }
 

@@ -81,8 +81,8 @@ export default async function SessionsPage({ searchParams }: PageProps) {
 
   const sessions = ((data ?? []) as DailySession[]).map((session) => ({
     ...session,
-    team_name: teamById.get(session.team_id) ?? "\u2014",
-    supervisor_name: supervisorById.get(session.supervisor_id) ?? "\u2014",
+    team_name: teamById.get(session.team_id) ?? "—",
+    supervisor_name: supervisorById.get(session.supervisor_id) ?? "—",
   })) as SessionRow[];
 
   const summary = {
@@ -99,11 +99,11 @@ export default async function SessionsPage({ searchParams }: PageProps) {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
-            {"\u0633\u062c\u0644 \u0627\u0644\u062c\u0644\u0633\u0627\u062a"}
+            {"سجل الجلسات"}
           </h1>
           <p className="text-sm text-muted-foreground">
             {
-              "\u0639\u0631\u0636 \u062c\u0644\u0633\u0627\u062a \u0627\u0644\u062a\u0648\u0632\u064a\u0639 \u0648\u0627\u0644\u0625\u063a\u0644\u0627\u0642 \u062d\u0633\u0628 \u0627\u0644\u062a\u0627\u0631\u064a\u062e \u0648\u0627\u0644\u062d\u0627\u0644\u0629."
+              "عرض جلسات التوزيع والإغلاق حسب التاريخ والحالة."
             }
           </p>
         </div>
@@ -112,14 +112,14 @@ export default async function SessionsPage({ searchParams }: PageProps) {
           {profile.role !== "viewer" && (
             <Button asChild>
               <Link href="/sessions/today">
-                {"\u062c\u0644\u0633\u0629 \u0627\u0644\u064a\u0648\u0645"}
+                {"جلسة اليوم"}
               </Link>
             </Button>
           )}
           {profile.role !== "viewer" && (
             <Button asChild variant="outline">
               <Link href="/sessions/closing">
-                {"\u0625\u063a\u0644\u0627\u0642 \u0627\u0644\u064a\u0648\u0645"}
+                {"إغلاق اليوم"}
               </Link>
             </Button>
           )}
@@ -128,22 +128,22 @@ export default async function SessionsPage({ searchParams }: PageProps) {
 
       <div className="grid gap-3 md:grid-cols-4">
         <SummaryCard
-          title="\u0625\u062c\u0645\u0627\u0644\u064a \u0627\u0644\u062c\u0644\u0633\u0627\u062a"
+          title="إجمالي الجلسات"
           value={summary.all}
           icon={<ClipboardList className="h-4 w-4" />}
         />
         <SummaryCard
-          title="\u0642\u064a\u062f \u0627\u0644\u062a\u062d\u0636\u064a\u0631"
+          title="قيد التحضير"
           value={summary.draft}
           icon={<Filter className="h-4 w-4" />}
         />
         <SummaryCard
-          title="\u062a\u0645 \u0627\u0644\u062a\u0648\u0632\u064a\u0639"
+          title="تم التوزيع"
           value={summary.morningSubmitted}
           icon={<CalendarRange className="h-4 w-4" />}
         />
         <SummaryCard
-          title="\u0645\u063a\u0644\u0642\u0629"
+          title="مغلقة"
           value={summary.closed}
           icon={<ClipboardList className="h-4 w-4" />}
         />
@@ -152,22 +152,22 @@ export default async function SessionsPage({ searchParams }: PageProps) {
       <Card>
         <CardHeader>
           <CardTitle className="text-base">
-            {"\u062a\u0635\u0641\u064a\u0629 \u0627\u0644\u062c\u0644\u0633\u0627\u062a"}
+            {"تصفية الجلسات"}
           </CardTitle>
           <CardDescription>
-            {"\u064a\u0645\u0643\u0646\u0643 \u062a\u0636\u064a\u064a\u0642 \u0627\u0644\u0646\u062a\u0627\u0626\u062c \u062d\u0633\u0628 \u0627\u0644\u062d\u0627\u0644\u0629 \u0623\u0648 \u0627\u0644\u0641\u0631\u064a\u0642 \u0623\u0648 \u0627\u0644\u0645\u0634\u0631\u0641."}
+            {"يمكنك تضييق النتائج حسب الحالة أو الفريق أو المشرف."}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             <FilterField
-              label="\u0645\u0646 \u062a\u0627\u0631\u064a\u062e"
+              label="من تاريخ"
               name="date_from"
               type="date"
               defaultValue={dateFrom}
             />
             <FilterField
-              label="\u0625\u0644\u0649 \u062a\u0627\u0631\u064a\u062e"
+              label="إلى تاريخ"
               name="date_to"
               type="date"
               defaultValue={dateTo}
@@ -175,7 +175,7 @@ export default async function SessionsPage({ searchParams }: PageProps) {
 
             <div className="space-y-1">
               <label htmlFor="status" className="text-sm font-medium">
-                {"\u0627\u0644\u062d\u0627\u0644\u0629"}
+                {"الحالة"}
               </label>
               <select
                 id="status"
@@ -184,16 +184,16 @@ export default async function SessionsPage({ searchParams }: PageProps) {
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
               >
                 <option value="">
-                  {"\u2014 \u0627\u0644\u0643\u0644 \u2014"}
+                  {"— الكل —"}
                 </option>
                 <option value="draft">
-                  {"\u0642\u064a\u062f \u0627\u0644\u062a\u062d\u0636\u064a\u0631"}
+                  {"قيد التحضير"}
                 </option>
                 <option value="morning_submitted">
-                  {"\u062a\u0645 \u0627\u0644\u062a\u0648\u0632\u064a\u0639"}
+                  {"تم التوزيع"}
                 </option>
                 <option value="closed">
-                  {"\u0645\u063a\u0644\u0642\u0629"}
+                  {"مغلقة"}
                 </option>
               </select>
             </div>
@@ -201,7 +201,7 @@ export default async function SessionsPage({ searchParams }: PageProps) {
             {profile.role !== "supervisor" && (
               <div className="space-y-1">
                 <label htmlFor="team_id" className="text-sm font-medium">
-                  {"\u0627\u0644\u0641\u0631\u064a\u0642"}
+                  {"الفريق"}
                 </label>
                 <select
                   id="team_id"
@@ -210,7 +210,7 @@ export default async function SessionsPage({ searchParams }: PageProps) {
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                 >
                   <option value="">
-                    {"\u2014 \u0627\u0644\u0643\u0644 \u2014"}
+                    {"— الكل —"}
                   </option>
                   {teams.map((team) => (
                     <option key={team.id} value={team.id}>
@@ -224,7 +224,7 @@ export default async function SessionsPage({ searchParams }: PageProps) {
             {profile.role !== "supervisor" && (
               <div className="space-y-1">
                 <label htmlFor="supervisor_id" className="text-sm font-medium">
-                  {"\u0627\u0644\u0645\u0634\u0631\u0641"}
+                  {"المشرف"}
                 </label>
                 <select
                   id="supervisor_id"
@@ -233,7 +233,7 @@ export default async function SessionsPage({ searchParams }: PageProps) {
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                 >
                   <option value="">
-                    {"\u2014 \u0627\u0644\u0643\u0644 \u2014"}
+                    {"— الكل —"}
                   </option>
                   {supervisors.map((supervisor) => (
                     <option key={supervisor.id} value={supervisor.id}>
@@ -246,11 +246,11 @@ export default async function SessionsPage({ searchParams }: PageProps) {
 
             <div className="flex gap-2 sm:col-span-2 lg:col-span-5">
               <Button type="submit">
-                {"\u062a\u0637\u0628\u064a\u0642"}
+                {"تطبيق"}
               </Button>
               <Button asChild type="button" variant="outline">
                 <Link href="/sessions">
-                  {"\u0625\u0639\u0627\u062f\u0629 \u062a\u0639\u064a\u064a\u0646"}
+                  {"إعادة تعيين"}
                 </Link>
               </Button>
             </div>
@@ -261,11 +261,11 @@ export default async function SessionsPage({ searchParams }: PageProps) {
       <Card>
         <CardHeader>
           <CardTitle>
-            {"\u0646\u062a\u0627\u0626\u062c \u0627\u0644\u062c\u0644\u0633\u0627\u062a"}
+            {"نتائج الجلسات"}
           </CardTitle>
           <CardDescription>
             {sessions.length}{" "}
-            {"\u062c\u0644\u0633\u0629"}
+            {"جلسة"}
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
@@ -273,22 +273,22 @@ export default async function SessionsPage({ searchParams }: PageProps) {
             <TableHeader>
               <TableRow>
                 <TableHead>
-                  {"\u0627\u0644\u062a\u0627\u0631\u064a\u062e"}
+                  {"التاريخ"}
                 </TableHead>
                 <TableHead>
-                  {"\u0627\u0644\u0641\u0631\u064a\u0642"}
+                  {"الفريق"}
                 </TableHead>
                 <TableHead>
-                  {"\u0627\u0644\u0645\u0634\u0631\u0641"}
+                  {"المشرف"}
                 </TableHead>
                 <TableHead>
-                  {"\u0627\u0644\u062d\u0627\u0644\u0629"}
+                  {"الحالة"}
                 </TableHead>
                 <TableHead>
-                  {"\u0627\u0644\u0625\u0646\u0634\u0627\u0621"}
+                  {"الإنشاء"}
                 </TableHead>
                 <TableHead className="text-left">
-                  {"\u0625\u062c\u0631\u0627\u0621\u0627\u062a"}
+                  {"إجراءات"}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -299,7 +299,7 @@ export default async function SessionsPage({ searchParams }: PageProps) {
                     colSpan={6}
                     className="py-6 text-center text-sm text-muted-foreground"
                   >
-                    {"\u0644\u0627 \u062a\u0648\u062c\u062f \u062c\u0644\u0633\u0627\u062a \u0645\u0637\u0627\u0628\u0642\u0629 \u0644\u0644\u062a\u0635\u0641\u064a\u0629."}
+                    {"لا توجد جلسات مطابقة للتصفية."}
                   </TableCell>
                 </TableRow>
               )}
@@ -328,7 +328,7 @@ export default async function SessionsPage({ searchParams }: PageProps) {
                                   : "/sessions/today"
                               }
                             >
-                              {"\u0627\u0644\u062a\u0648\u0632\u064a\u0639"}
+                              {"التوزيع"}
                             </Link>
                           </Button>
                           <Button asChild size="sm" variant="outline">
@@ -339,7 +339,7 @@ export default async function SessionsPage({ searchParams }: PageProps) {
                                   : "/sessions/closing"
                               }
                             >
-                              {"\u0627\u0644\u0625\u063a\u0644\u0627\u0642"}
+                              {"الإغلاق"}
                             </Link>
                           </Button>
                         </>
@@ -373,7 +373,7 @@ function SummaryCard({
       </CardHeader>
       <CardContent className="flex items-center gap-2 text-sm text-muted-foreground">
         {icon}
-        {"\u062a\u062d\u062f\u064a\u062b \u0645\u0628\u0627\u0634\u0631 \u062d\u0633\u0628 \u0627\u0644\u062a\u0635\u0641\u064a\u0629"}
+        {"تحديث مباشر حسب التصفية"}
       </CardContent>
     </Card>
   );
@@ -409,10 +409,10 @@ function FilterField({
 
 function statusBadge(status: DailySession["status"]) {
   if (status === "draft") {
-    return <Badge variant="secondary">{"\u0642\u064a\u062f \u0627\u0644\u062a\u062d\u0636\u064a\u0631"}</Badge>;
+    return <Badge variant="secondary">{"قيد التحضير"}</Badge>;
   }
   if (status === "morning_submitted") {
-    return <Badge variant="warning">{"\u062a\u0645 \u0627\u0644\u062a\u0648\u0632\u064a\u0639"}</Badge>;
+    return <Badge variant="warning">{"تم التوزيع"}</Badge>;
   }
-  return <Badge variant="success">{"\u0645\u063a\u0644\u0642\u0629"}</Badge>;
+  return <Badge variant="success">{"مغلقة"}</Badge>;
 }

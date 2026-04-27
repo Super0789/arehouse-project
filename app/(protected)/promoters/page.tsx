@@ -28,11 +28,11 @@ export default async function PromotersPage() {
       <div className="mx-auto max-w-2xl">
         <Alert variant="destructive">
           <AlertTitle>
-            {"\u063a\u064a\u0631 \u0645\u0635\u0631\u062d"}
+            {"غير مصرح"}
           </AlertTitle>
           <AlertDescription>
             {
-              "\u0647\u0630\u0647 \u0627\u0644\u0634\u0627\u0634\u0629 \u0645\u062a\u0627\u062d\u0629 \u0644\u0645\u062f\u064a\u0631 \u0627\u0644\u0646\u0638\u0627\u0645 \u0623\u0648 \u062d\u0633\u0627\u0628 \u0627\u0644\u0645\u0634\u0627\u0647\u062f\u0629 \u0641\u0642\u0637."
+              "هذه الشاشة متاحة لمدير النظام أو حساب المشاهدة فقط."
             }
           </AlertDescription>
         </Alert>
@@ -60,7 +60,7 @@ export default async function PromotersPage() {
     teams: { team_name: string } | null;
   })[]).map((supervisor) => ({
     ...supervisor,
-    team_name: supervisor.teams?.team_name ?? "\u2014",
+    team_name: supervisor.teams?.team_name ?? "—",
   }));
 
   const supervisorsBase: Supervisor[] = supervisors.map((supervisor) => {
@@ -75,8 +75,8 @@ export default async function PromotersPage() {
     supervisors: { full_name: string } | null;
   })[]).map((promoter) => ({
     ...promoter,
-    team_name: promoter.teams?.team_name ?? "\u2014",
-    supervisor_name: promoter.supervisors?.full_name ?? "\u2014",
+    team_name: promoter.teams?.team_name ?? "—",
+    supervisor_name: promoter.supervisors?.full_name ?? "—",
   })) as PromoterRow[];
 
   const activePromoters = promoters.filter((promoter) => promoter.active).length;
@@ -88,11 +88,11 @@ export default async function PromotersPage() {
     <div className="mx-auto max-w-7xl space-y-4">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">
-          {"\u0627\u0644\u0645\u0631\u0648\u062c\u0648\u0646"}
+          {"المروجون"}
         </h1>
         <p className="text-sm text-muted-foreground">
           {
-            "\u0634\u0627\u0634\u0629 \u0645\u062e\u0635\u0635\u0629 \u0644\u0625\u062f\u0627\u0631\u0629 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0645\u0631\u0648\u062c\u064a\u0646 \u0648\u0631\u0628\u0637\u0647\u0645 \u0628\u0627\u0644\u0641\u0631\u0642 \u0648\u0627\u0644\u0645\u0634\u0631\u0641\u064a\u0646."
+            "شاشة مخصصة لإدارة بيانات المروجين وربطهم بالفرق والمشرفين."
           }
         </p>
       </div>
@@ -101,38 +101,38 @@ export default async function PromotersPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>
-              {"\u0625\u062c\u0645\u0627\u0644\u064a \u0627\u0644\u0645\u0631\u0648\u062c\u064a\u0646"}
+              {"إجمالي المروجين"}
             </CardDescription>
             <CardTitle>{promoters.length}</CardTitle>
           </CardHeader>
           <CardContent className="flex items-center gap-2 text-sm text-muted-foreground">
             <Users className="h-4 w-4" />
-            {"\u062c\u0645\u064a\u0639 \u0633\u062c\u0644\u0627\u062a \u0627\u0644\u0645\u0631\u0648\u062c\u064a\u0646"}
+            {"جميع سجلات المروجين"}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>
-              {"\u0627\u0644\u0645\u0631\u0648\u062c\u0648\u0646 \u0627\u0644\u0646\u0634\u0637\u0648\u0646"}
+              {"المروجون النشطون"}
             </CardDescription>
             <CardTitle>{activePromoters}</CardTitle>
           </CardHeader>
           <CardContent className="flex items-center gap-2 text-sm text-muted-foreground">
             <UsersRound className="h-4 w-4" />
-            {"\u062c\u0627\u0647\u0632\u0648\u0646 \u0644\u0644\u062a\u0648\u0632\u064a\u0639 \u0627\u0644\u064a\u0648\u0645\u064a"}
+            {"جاهزون للتوزيع اليومي"}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>
-              {"\u0641\u0631\u0642 \u0641\u0639\u0627\u0644\u0629"}
+              {"فرق فعالة"}
             </CardDescription>
             <CardTitle>{activeTeams}</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
-            {"\u0641\u0631\u0642 \u0644\u062f\u064a\u0647\u0627 \u0645\u0631\u0648\u062c\u0648\u0646 \u0646\u0634\u0637\u0648\u0646"}
+            {"فرق لديها مروجون نشطون"}
           </CardContent>
         </Card>
       </div>
