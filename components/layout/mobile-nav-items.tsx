@@ -49,6 +49,12 @@ const NAV: NavItem[] = [
     roles: ["admin", "supervisor", "viewer"],
   },
   {
+    href: "/stock/warehouse",
+    label: "\u0627\u0644\u0645\u062e\u0632\u0646 \u0627\u0644\u0631\u0626\u064a\u0633\u064a",
+    icon: Warehouse,
+    roles: ["admin", "viewer"],
+  },
+  {
     href: "/stock/transfers",
     label: "\u062a\u062d\u0648\u064a\u0644\u0627\u062a \u0627\u0644\u0645\u062e\u0632\u0648\u0646",
     icon: ArrowRightLeft,

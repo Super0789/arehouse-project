@@ -176,7 +176,12 @@ export async function getDashboardData(
     perSession.set(c.daily_session_id, e);
   }
 
-  const supervisorRows: SupervisorSummaryRow[] = supervisors.map((sv) => {
+  const visibleSupervisors =
+    profile.role === "supervisor"
+      ? supervisors.filter((sv) => sv.id === profile.linked_supervisor_id)
+      : supervisors;
+
+  const supervisorRows: SupervisorSummaryRow[] = visibleSupervisors.map((sv) => {
     const session = sessionsToday.find((s) => s.supervisor_id === sv.id);
     const agg = session ? perSession.get(session.id) : undefined;
     const team = teamById.get(sv.team_id);

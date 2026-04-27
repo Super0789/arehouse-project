@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Send } from "lucide-react";
+import { Loader2, PackagePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,30 +14,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import type { Item, Supervisor } from "@/lib/types/database";
-import { transferOpeningStock } from "@/app/(protected)/stock/transfers/actions";
+import type { Item } from "@/lib/types/database";
+import { receiveWarehouseStock } from "@/app/(protected)/stock/warehouse/actions";
 
 interface Props {
-  supervisors: (Supervisor & { team_name: string })[];
   items: Item[];
-  warehouseByItem: Record<string, number>;
 }
 
-export function TransferForm({ supervisors, items, warehouseByItem }: Props) {
+export function WarehouseReceiveForm({ items }: Props) {
   const router = useRouter();
   const { toast } = useToast();
   const [submitting, setSubmitting] = React.useState(false);
   const [form, setForm] = React.useState({
-    supervisor_id: "",
     item_id: "",
     qty: "",
     notes: "",
   });
-
-  const selectedItem = items.find((it) => it.id === form.item_id) ?? null;
-  const availableQty = form.item_id
-    ? (warehouseByItem[form.item_id] ?? 0)
-    : null;
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,17 +42,8 @@ export function TransferForm({ supervisors, items, warehouseByItem }: Props) {
       });
       return;
     }
-    if (availableQty !== null && n > availableQty) {
-      toast({
-        variant: "destructive",
-        title: "رصيد غير كافٍ",
-        description: `المخزن الرئيسي يحتوي ${availableQty} فقط من هذا الصنف.`,
-      });
-      return;
-    }
     setSubmitting(true);
-    const res = await transferOpeningStock({
-      supervisor_id: form.supervisor_id,
+    const res = await receiveWarehouseStock({
       item_id: form.item_id,
       qty: n,
       notes: form.notes || null,
@@ -68,7 +51,7 @@ export function TransferForm({ supervisors, items, warehouseByItem }: Props) {
     setSubmitting(false);
     if (res.ok) {
       toast({ variant: "success", title: res.message ?? "تم" });
-      setForm({ supervisor_id: "", item_id: "", qty: "", notes: "" });
+      setForm({ item_id: "", qty: "", notes: "" });
       router.refresh();
     } else {
       toast({ variant: "destructive", title: "خطأ", description: res.error });
@@ -81,9 +64,9 @@ export function TransferForm({ supervisors, items, warehouseByItem }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>تحويل مخزون إلى مشرف</CardTitle>
+        <CardTitle>إضافة كمية إلى المخزن الرئيسي</CardTitle>
         <CardDescription>
-          إضافة كمية افتتاحية من المخزن المركزي إلى مخزون مشرف معيّن.
+          استقبال شحنة جديدة وإضافتها إلى الرصيد العام قبل توزيعها على المشرفين.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -91,25 +74,6 @@ export function TransferForm({ supervisors, items, warehouseByItem }: Props) {
           onSubmit={onSubmit}
           className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
         >
-          <div className="space-y-1 sm:col-span-2 lg:col-span-2">
-            <Label htmlFor="supervisor_id">المشرف</Label>
-            <select
-              id="supervisor_id"
-              value={form.supervisor_id}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, supervisor_id: e.target.value }))
-              }
-              required
-              className={selectClass}
-            >
-              <option value="">— اختر المشرف —</option>
-              {supervisors.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.full_name} — {s.team_name}
-                </option>
-              ))}
-            </select>
-          </div>
           <div className="space-y-1 sm:col-span-2">
             <Label htmlFor="item_id">الصنف</Label>
             <select
@@ -141,13 +105,8 @@ export function TransferForm({ supervisors, items, warehouseByItem }: Props) {
               onChange={(e) => setForm((f) => ({ ...f, qty: e.target.value }))}
               required
             />
-            {selectedItem && availableQty !== null && (
-              <p className="text-xs text-muted-foreground">
-                المتوفر في المخزن الرئيسي: {availableQty} {selectedItem.unit}
-              </p>
-            )}
           </div>
-          <div className="space-y-1 lg:col-span-3">
+          <div className="space-y-1 lg:col-span-1">
             <Label htmlFor="notes">ملاحظات</Label>
             <Input
               id="notes"
@@ -163,9 +122,9 @@ export function TransferForm({ supervisors, items, warehouseByItem }: Props) {
               {submitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <Send className="h-4 w-4" />
+                <PackagePlus className="h-4 w-4" />
               )}
-              تنفيذ التحويل
+              إضافة الكمية
             </Button>
           </div>
         </form>

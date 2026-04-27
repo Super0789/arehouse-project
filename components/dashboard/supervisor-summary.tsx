@@ -33,15 +33,21 @@ const STATUS_VARIANT = {
 
 export function SupervisorSummary({
   rows,
+  selfView = false,
 }: {
   rows: SupervisorSummaryRow[];
+  selfView?: boolean;
 }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>ملخّص المشرفين اليوم</CardTitle>
+        <CardTitle>
+          {selfView ? "ملخّصك اليوم" : "ملخّص المشرفين اليوم"}
+        </CardTitle>
         <CardDescription>
-          الموزّع والمتبقي والاستهلاك لكل مشرف
+          {selfView
+            ? "الموزّع والمتبقي والاستهلاك لجلستك"
+            : "الموزّع والمتبقي والاستهلاك لكل مشرف"}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0">

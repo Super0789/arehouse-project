@@ -53,6 +53,27 @@ export interface SupervisorStock {
   updated_at: string;
 }
 
+export type WarehouseMovementType = "received" | "transfer_out" | "adjustment";
+
+export interface WarehouseStock {
+  id: string;
+  item_id: string;
+  quantity_on_hand: number;
+  updated_at: string;
+}
+
+export interface WarehouseMovement {
+  id: string;
+  movement_type: WarehouseMovementType;
+  item_id: string;
+  qty: number;
+  supervisor_id: string | null;
+  related_stock_movement_id: string | null;
+  movement_date: string;
+  notes: string | null;
+  created_by: string | null;
+}
+
 export interface DailySession {
   id: string;
   session_date: string;

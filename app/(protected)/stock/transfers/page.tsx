@@ -24,6 +24,7 @@ import type {
   StockMovement,
   Supervisor,
   Team,
+  WarehouseStock,
 } from "@/lib/types/database";
 
 export const dynamic = "force-dynamic";
@@ -50,17 +51,19 @@ export default async function StockTransfersPage() {
   }
 
   const supabase = createClient();
-  const [supervisorsRes, teamsRes, itemsRes, movementsRes] = await Promise.all([
-    supabase.from("supervisors").select("*").eq("active", true).order("full_name"),
-    supabase.from("teams").select("*"),
-    supabase.from("items").select("*").eq("active", true).order("item_name"),
-    supabase
-      .from("stock_movements")
-      .select("*")
-      .in("movement_type", ["opening_stock", "adjustment"])
-      .order("movement_date", { ascending: false })
-      .limit(50),
-  ]);
+  const [supervisorsRes, teamsRes, itemsRes, movementsRes, warehouseRes] =
+    await Promise.all([
+      supabase.from("supervisors").select("*").eq("active", true).order("full_name"),
+      supabase.from("teams").select("*"),
+      supabase.from("items").select("*").eq("active", true).order("item_name"),
+      supabase
+        .from("stock_movements")
+        .select("*")
+        .in("movement_type", ["opening_stock", "adjustment"])
+        .order("movement_date", { ascending: false })
+        .limit(50),
+      supabase.from("warehouse_stock").select("*"),
+    ]);
 
   const teams = (teamsRes.data ?? []) as Team[];
   const teamById = new Map(teams.map((t) => [t.id, t]));
@@ -76,6 +79,11 @@ export default async function StockTransfersPage() {
 
   const movements = (movementsRes.data ?? []) as StockMovement[];
 
+  const warehouseStock = (warehouseRes.data ?? []) as WarehouseStock[];
+  const warehouseByItem: Record<string, number> = Object.fromEntries(
+    warehouseStock.map((r) => [r.item_id, r.quantity_on_hand]),
+  );
+
   return (
     <div className="mx-auto max-w-7xl space-y-4">
       <div>
@@ -86,7 +94,11 @@ export default async function StockTransfersPage() {
         </p>
       </div>
 
-      <TransferForm supervisors={supervisors} items={items} />
+      <TransferForm
+        supervisors={supervisors}
+        items={items}
+        warehouseByItem={warehouseByItem}
+      />
 
       <Card>
         <CardHeader>

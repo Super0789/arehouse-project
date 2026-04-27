@@ -59,7 +59,10 @@ export default async function DashboardPage() {
           <SessionsStatus data={data.sessions} />
         </div>
         <div className="lg:col-span-2">
-          <SupervisorSummary rows={data.supervisors} />
+          <SupervisorSummary
+            rows={data.supervisors}
+            selfView={profile.role === "supervisor"}
+          />
         </div>
       </div>
 
