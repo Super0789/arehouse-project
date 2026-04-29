@@ -175,6 +175,102 @@ export async function saveDraftDistribution(
 }
 
 /**
+ * Add more quantity to an existing distribution (or create a new line) AFTER
+ * the morning has been submitted but BEFORE the session is closed.
+ *
+ * Use case: a promoter has finished what they were given and the supervisor
+ * wants to hand out more during the day. Stock is validated by the
+ * morning_distribution trigger and the stock_movements trigger; we just do an
+ * upsert-add at the app layer (sequential by row, but rows are tiny).
+ */
+export interface ExtraDistributionLine {
+  promoter_id: string;
+  item_id: string;
+  qty_extra: number;
+}
+
+export async function addExtraDistribution(
+  sessionId: string,
+  lines: ExtraDistributionLine[],
+): Promise<ActionResult> {
+  const profile = await getProfile();
+  if (!profile) return { ok: false, error: "جلستك منتهية." };
+  if (profile.role !== "admin" && profile.role !== "supervisor") {
+    return { ok: false, error: "غير مصرّح" };
+  }
+
+  const supabase = createClient();
+
+  const { data: session, error: sErr } = await supabase
+    .from("daily_sessions")
+    .select("*")
+    .eq("id", sessionId)
+    .maybeSingle<DailySession>();
+  if (sErr || !session) return { ok: false, error: "الجلسة غير موجودة." };
+
+  if (session.status === "draft") {
+    return {
+      ok: false,
+      error: "الجلسة لم تُرسَل بعد — استخدم شاشة التوزيع للتعديل.",
+    };
+  }
+  if (session.status === "closed") {
+    return { ok: false, error: "الجلسة مغلقة." };
+  }
+  if (
+    profile.role === "supervisor" &&
+    session.supervisor_id !== profile.linked_supervisor_id
+  ) {
+    return { ok: false, error: "غير مصرّح" };
+  }
+
+  const clean = lines.filter(
+    (l) =>
+      Number.isInteger(l.qty_extra) &&
+      l.qty_extra > 0 &&
+      l.promoter_id &&
+      l.item_id,
+  );
+  if (clean.length === 0) {
+    return { ok: false, error: "أدخل كمية إضافية صحيحة." };
+  }
+
+  for (const line of clean) {
+    const { data: existing, error: exErr } = await supabase
+      .from("morning_distribution")
+      .select("id, qty_given")
+      .eq("daily_session_id", sessionId)
+      .eq("promoter_id", line.promoter_id)
+      .eq("item_id", line.item_id)
+      .maybeSingle<{ id: string; qty_given: number }>();
+    if (exErr) return { ok: false, error: exErr.message };
+
+    if (existing) {
+      const { error: upErr } = await supabase
+        .from("morning_distribution")
+        .update({ qty_given: existing.qty_given + line.qty_extra })
+        .eq("id", existing.id);
+      if (upErr) return { ok: false, error: upErr.message };
+    } else {
+      const { error: insErr } = await supabase
+        .from("morning_distribution")
+        .insert({
+          daily_session_id: sessionId,
+          promoter_id: line.promoter_id,
+          item_id: line.item_id,
+          qty_given: line.qty_extra,
+        });
+      if (insErr) return { ok: false, error: insErr.message };
+    }
+  }
+
+  revalidatePath("/sessions/today");
+  revalidatePath("/sessions/closing");
+  revalidatePath("/dashboard");
+  return { ok: true, message: "تم تسجيل الكمية الإضافية." };
+}
+
+/**
  * Submit the matrix: calls the RPC which validates against stock, inserts
  * distribution + stock_movements atomically, and flips status.
  */

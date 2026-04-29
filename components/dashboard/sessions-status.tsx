@@ -10,7 +10,13 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import type { SessionsStatus as SessionsStatusType } from "@/lib/queries/dashboard";
 
-export function SessionsStatus({ data }: { data: SessionsStatusType }) {
+export function SessionsStatus({
+  data,
+  isAdmin = false,
+}: {
+  data: SessionsStatusType;
+  isAdmin?: boolean;
+}) {
   const open = data.draft + data.morningSubmitted;
   const totalWithSession = data.totalTeams - data.teamsWithoutSession.length;
 
@@ -18,9 +24,11 @@ export function SessionsStatus({ data }: { data: SessionsStatusType }) {
     <Card>
       <CardHeader>
         <CardTitle>حالة جلسات اليوم</CardTitle>
-        <CardDescription>
-          {totalWithSession} من {data.totalTeams} فرق بدأت جلسة اليوم
-        </CardDescription>
+        {isAdmin && (
+          <CardDescription>
+            {totalWithSession} من {data.totalTeams} فرق بدأت جلسة اليوم
+          </CardDescription>
+        )}
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-3 gap-2">
@@ -55,7 +63,7 @@ export function SessionsStatus({ data }: { data: SessionsStatusType }) {
           </div>
         </div>
 
-        {data.teamsWithoutSession.length > 0 && (
+        {isAdmin && data.teamsWithoutSession.length > 0 && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>فرق لم تبدأ جلسة اليوم</AlertTitle>
@@ -71,14 +79,16 @@ export function SessionsStatus({ data }: { data: SessionsStatusType }) {
           </Alert>
         )}
 
-        {data.teamsWithoutSession.length === 0 && data.totalTeams > 0 && (
-          <Alert variant="default">
-            <CheckCircle2 className="h-4 w-4" />
-            <AlertDescription>
-              جميع الفرق لديها جلسة لهذا اليوم.
-            </AlertDescription>
-          </Alert>
-        )}
+        {isAdmin &&
+          data.teamsWithoutSession.length === 0 &&
+          data.totalTeams > 0 && (
+            <Alert variant="default">
+              <CheckCircle2 className="h-4 w-4" />
+              <AlertDescription>
+                جميع الفرق لديها جلسة لهذا اليوم.
+              </AlertDescription>
+            </Alert>
+          )}
       </CardContent>
     </Card>
   );

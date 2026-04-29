@@ -56,7 +56,10 @@ export default async function DashboardPage() {
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="lg:col-span-1">
-          <SessionsStatus data={data.sessions} />
+          <SessionsStatus
+            data={data.sessions}
+            isAdmin={profile.role === "admin"}
+          />
         </div>
         <div className="lg:col-span-2">
           <SupervisorSummary

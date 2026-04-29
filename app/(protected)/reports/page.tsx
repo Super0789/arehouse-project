@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ReportsFilters } from "@/components/reports/reports-filters";
+import { ExportCsvButton } from "@/components/reports/export-csv-button";
 import { formatNumber, todayISO } from "@/lib/utils";
 import type {
   DailySession,
@@ -252,12 +253,28 @@ export default async function ReportsPage({ searchParams }: PageProps) {
 
       {/* Morning distribution */}
       <Card>
-        <CardHeader>
-          <CardTitle>تقرير توزيع الصباح</CardTitle>
-          <CardDescription>
-            عدد العمليات: {morningRows.length} — الإجمالي:{" "}
-            {formatNumber(morningTotal)}
-          </CardDescription>
+        <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <CardTitle>تقرير توزيع الصباح</CardTitle>
+            <CardDescription>
+              عدد العمليات: {morningRows.length} — الإجمالي:{" "}
+              {formatNumber(morningTotal)}
+            </CardDescription>
+          </div>
+          {profile.role === "admin" && (
+            <ExportCsvButton
+              filename={`morning_distribution_${dateFrom}_to_${dateTo}`}
+              rows={morningRows}
+              columns={[
+                { key: "date", header: "التاريخ" },
+                { key: "team", header: "الفريق" },
+                { key: "supervisor", header: "المشرف" },
+                { key: "promoter_name", header: "المروّج" },
+                { key: "item_name", header: "الصنف" },
+                { key: "qty_given", header: "الكمية" },
+              ]}
+            />
+          )}
         </CardHeader>
         <CardContent className="p-0">
           <Table>
@@ -303,13 +320,31 @@ export default async function ReportsPage({ searchParams }: PageProps) {
 
       {/* End of day */}
       <Card>
-        <CardHeader>
-          <CardTitle>تقرير نهاية اليوم</CardTitle>
-          <CardDescription>
-            موزّع: {formatNumber(eodTotals.given)} — متبقي:{" "}
-            {formatNumber(eodTotals.remaining)} — استهلاك:{" "}
-            {formatNumber(eodTotals.consumed)}
-          </CardDescription>
+        <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <CardTitle>تقرير نهاية اليوم</CardTitle>
+            <CardDescription>
+              موزّع: {formatNumber(eodTotals.given)} — متبقي:{" "}
+              {formatNumber(eodTotals.remaining)} — استهلاك:{" "}
+              {formatNumber(eodTotals.consumed)}
+            </CardDescription>
+          </div>
+          {profile.role === "admin" && (
+            <ExportCsvButton
+              filename={`end_of_day_${dateFrom}_to_${dateTo}`}
+              rows={eodRows}
+              columns={[
+                { key: "date", header: "التاريخ" },
+                { key: "team", header: "الفريق" },
+                { key: "supervisor", header: "المشرف" },
+                { key: "promoter_name", header: "المروّج" },
+                { key: "item_name", header: "الصنف" },
+                { key: "given", header: "موزّع" },
+                { key: "remaining", header: "متبقي" },
+                { key: "consumed", header: "استهلاك" },
+              ]}
+            />
+          )}
         </CardHeader>
         <CardContent className="p-0">
           <Table>
@@ -363,11 +398,27 @@ export default async function ReportsPage({ searchParams }: PageProps) {
 
       {/* Per-promoter consumption */}
       <Card>
-        <CardHeader>
-          <CardTitle>الاستهلاك لكل مروّج</CardTitle>
-          <CardDescription>
-            تجميع للفترة المختارة — مرتّب حسب الاستهلاك الأعلى
-          </CardDescription>
+        <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <CardTitle>الاستهلاك لكل مروّج</CardTitle>
+            <CardDescription>
+              تجميع للفترة المختارة — مرتّب حسب الاستهلاك الأعلى
+            </CardDescription>
+          </div>
+          {profile.role === "admin" && (
+            <ExportCsvButton
+              filename={`per_promoter_${dateFrom}_to_${dateTo}`}
+              rows={promoterRows}
+              columns={[
+                { key: "promoter_name", header: "المروّج" },
+                { key: "team_name", header: "الفريق" },
+                { key: "supervisor_name", header: "المشرف" },
+                { key: "given", header: "موزّع" },
+                { key: "remaining", header: "متبقي" },
+                { key: "consumed", header: "استهلاك" },
+              ]}
+            />
+          )}
         </CardHeader>
         <CardContent className="p-0">
           <Table>

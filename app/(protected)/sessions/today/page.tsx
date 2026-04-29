@@ -17,6 +17,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DistributionMatrix } from "@/components/sessions/distribution-matrix";
+import { ExtraDistribution } from "@/components/sessions/extra-distribution";
 import { SupervisorSwitcher } from "@/components/sessions/supervisor-switcher";
 import { CreateSessionButton } from "./create-session-button";
 
@@ -195,6 +196,16 @@ export default async function TodaySessionPage({ searchParams }: PageProps) {
             </AlertDescription>
           </Alert>
         )}
+
+      {session && session.status === "morning_submitted" && (
+        <ExtraDistribution
+          session={session}
+          promoters={promoters}
+          items={items}
+          stock={stock}
+          distribution={distribution}
+        />
+      )}
 
       {session && (
         <DistributionMatrix
